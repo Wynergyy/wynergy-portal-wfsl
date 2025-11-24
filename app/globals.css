@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global WFSL styling */
+body {
+  @apply bg-neutral-900 text-white;
+}
+
+.card {
+  @apply rounded-xl border border-neutral-700 p-6 shadow-md bg-neutral-800
+         transition-all duration-200 hover:shadow-xl hover:-translate-y-1;
+}
+
+h1, h2, h3, h4 {
+  @apply text-white;
+}
+
+p {
+  @apply text-neutral-400;
+}
