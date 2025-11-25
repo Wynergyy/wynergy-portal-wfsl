@@ -7,13 +7,11 @@ export default function OnboardingPage() {
   async function handleSubmit(formData: FormData) {
     "use server";
 
-    const data = {
+    await registerEngineer({
       fullName: formData.get("fullName"),
       email: formData.get("email"),
       phone: formData.get("phone"),
-    };
-
-    await registerEngineer(data);
+    });
   }
 
   return (
