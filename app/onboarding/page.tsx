@@ -1,38 +1,28 @@
-export const dynamic = "force-dynamic";
+"use server";
 
-import { registerEngineer } from "./actions";
+import { prisma } from "@/lib/prisma";
 
-export default function OnboardingPage() {
-  async function handleSubmit(formData: FormData) {
-    "use server";
-
-    const data = {
-      fullName: formData.get("fullName"),
-      email: formData.get("email"),
-      phone: formData.get("phone"),
-    };
-
-    await registerEngineer(data);
+export async function registerEngineer(data: {
+  fullName: FormDataEntryValue | null;
+  email: FormDataEntryValue | null;
+  phone: FormDataEntryValue | null;
+}) {
+  if (!data.fullName || !data.email) {
+    return { success: false, error: "Missing required fields" };
   }
 
-  return (
-    <form action={handleSubmit} className="space-y-4 p-4">
-      <div>
-        <label>Full Name</label>
-        <input type="text" name="fullName" required />
-      </div>
+  try {
+    await prisma.engineer.create({
+      data: {
+        fullName: String(data.fullName),
+        email: String(data.email),
+        phone: data.phone ? String(data.phone) : null,
+      },
+    });
 
-      <div>
-        <label>Email</label>
-        <input type="email" name="email" required />
-      </div>
-
-      <div>
-        <label>Phone</label>
-        <input type="text" name="phone" />
-      </div>
-
-      <button type="submit">Register Engineer</button>
-    </form>
-  );
+    return { success: true };
+  } catch (err) {
+    console.error("RegisterEngineer Error:", err);
+    return { success: false, error: "Database error" };
+  }
 }
