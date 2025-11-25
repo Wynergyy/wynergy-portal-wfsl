@@ -1,23 +1,28 @@
-'use server'
+"use server";
 
-import { prisma } from "@/lib/prisma"
-import { z } from "zod"
+import { prisma } from "@/lib/prisma";
 
-const OnboardingSchema = z.object({
-  fullName: z.string().min(1),
-  email: z.string().email(),
-  phone: z.string().optional()
-})
-
-export async function registerEngineer(data: unknown) {
-  const parsed = OnboardingSchema.safeParse(data)
-  if (!parsed.success) {
-    return { error: "Invalid data" }
+export async function registerEngineer(data: {
+  fullName: FormDataEntryValue | null;
+  email: FormDataEntryValue | null;
+  phone: FormDataEntryValue | null;
+}) {
+  if (!data.fullName || !data.email) {
+    return { success: false, error: "Missing required fields" };
   }
 
-  await prisma.engineer.create({
-    data: parsed.data
-  })
+  try {
+    await prisma.engineer.create({
+      data: {
+        fullName: String(data.fullName),
+        email: String(data.email),
+        phone: data.phone ? String(data.phone) : null,
+      },
+    });
 
-  return { ok: true }
+    return { success: true };
+  } catch (err) {
+    console.error("RegisterEngineer Error:", err);
+    return { success: false, error: "Database error" };
+  }
 }
