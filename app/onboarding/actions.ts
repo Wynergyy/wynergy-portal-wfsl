@@ -2,13 +2,16 @@
 
 import { prisma } from "@/lib/prisma";
 
-export async function registerEngineer(data: {
+interface EngineerInput {
   fullName: FormDataEntryValue | null;
   email: FormDataEntryValue | null;
   phone: FormDataEntryValue | null;
-}) {
+}
+
+export async function registerEngineer(data: EngineerInput) {
   if (!data.fullName || !data.email) {
-    return { success: false, error: "Missing required fields" };
+    console.error("Missing required fields");
+    return;
   }
 
   try {
@@ -20,9 +23,8 @@ export async function registerEngineer(data: {
       },
     });
 
-    return { success: true };
+    console.log("Engineer registered successfully.");
   } catch (err) {
-    console.error("RegisterEngineer Error:", err);
-    return { success: false, error: "Database error" };
+    console.error("Error creating engineer:", err);
   }
 }
