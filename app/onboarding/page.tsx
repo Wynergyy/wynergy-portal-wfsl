@@ -1,16 +1,18 @@
-import { registerEngineer } from "./actions"
+export const dynamic = "force-dynamic";
+
+import { registerEngineer } from "./actions";
 
 export default function OnboardingPage() {
   async function handleSubmit(formData: FormData) {
-    "use server"
+    "use server";
 
     const data = {
       fullName: formData.get("fullName"),
       email: formData.get("email"),
-      phone: formData.get("phone")
-    }
+      phone: formData.get("phone"),
+    };
 
-    await registerEngineer(data)
+    await registerEngineer(data);
   }
 
   return (
@@ -30,9 +32,7 @@ export default function OnboardingPage() {
         <input type="text" name="phone" />
       </div>
 
-      <button type="submit">
-        Register Engineer
-      </button>
+      <button type="submit">Register Engineer</button>
     </form>
-  )
+  );
 }
