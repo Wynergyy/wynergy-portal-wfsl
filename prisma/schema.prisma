@@ -1,52 +1,126 @@
+// ---------------------------------------------------------
+// GENERATORS
+// ---------------------------------------------------------
 generator client {
   provider = "prisma-client-js"
 }
 
+// ---------------------------------------------------------
+// DATASOURCE
+// ---------------------------------------------------------
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+// ---------------------------------------------------------
+// USER MODEL
+// ---------------------------------------------------------
 model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+
+  engineers         Engineer[]
+  EmailVerification EmailVerification[]
+  PasswordReset     PasswordReset[]
+}
+
+// ---------------------------------------------------------
+// ACCOUNT MODEL
+// (Required by your existing authentication stack)
+// ---------------------------------------------------------
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ---------------------------------------------------------
+// SESSION MODEL
+// ---------------------------------------------------------
+model Session {
   id        String   @id @default(cuid())
-  email     String   @unique
+  userId    String
+  expiresAt DateTime
   createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+// ---------------------------------------------------------
+// EMAIL VERIFICATION (from your auth email suite)
+// ---------------------------------------------------------
+model EmailVerification {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ---------------------------------------------------------
+// PASSWORD RESET TOKENS (from your auth email suite)
+// ---------------------------------------------------------
+model PasswordReset {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ---------------------------------------------------------
+// ENGINEER MODEL (WFSL ONBOARDING MODULE)
+// ---------------------------------------------------------
 model Engineer {
-  id             String              @id @default(uuid())
-  fullName       String
-  email          String              @unique
-  phone          String?
-  createdAt      DateTime            @default(now())
-  certifications Certification[]
-  assignments    LicenceAssignment[]
-  contractorId   String?
-  contractor     Contractor?         @relation(fields: [contractorId], references: [id])
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  fullName String
+  email    String
+  phone    String?
+  address  String?
+
+  cscsNumber  String?
+  nrswaNumber String?
+  nopsCert    String?
+  rightToWork String?
+
+  status EngineerStatus @default(PENDING)
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
 }
 
-model Contractor {
-  id        String     @id @default(uuid())
-  name      String
-  email     String     @unique
-  phone     String?
-  engineers Engineer[]
-  createdAt DateTime   @default(now())
-}
-
-model Certification {
-  id         String   @id @default(uuid())
-  engineerId String
-  type       String
-  issuedAt   DateTime @default(now())
-  expiresAt  DateTime
-  engineer   Engineer @relation(fields: [engineerId], references: [id])
-}
-
-model LicenceAssignment {
-  id          String   @id @default(uuid())
-  engineerId  String
-  licenceCode String
-  assignedAt  DateTime @default(now())
-  engineer    Engineer @relation(fields: [engineerId], references: [id])
+// ---------------------------------------------------------
+// ENGINEER STATUS ENUM
+// ---------------------------------------------------------
+enum EngineerStatus {
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
 }
