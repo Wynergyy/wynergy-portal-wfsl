@@ -1,22 +1,27 @@
-export default function OnboardingIndex() {
-  return (
-    <main className="min-h-screen px-6 py-10">
-      <section className="max-w-2xl mx-auto space-y-4">
-        <h1 className="text-xl font-semibold tracking-tight">
-          WFSL Onboarding
-        </h1>
-        <p className="text-sm text-gray-500">
-          Choose a step to continue your onboarding.
-        </p>
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
-        <ul className="space-y-2 text-sm">
-          <li><a href="/onboarding/identity" className="underline">Identity</a></li>
-          <li><a href="/onboarding/profile" className="underline">Profile</a></li>
-          <li><a href="/onboarding/safety" className="underline">Safety</a></li>
-          <li><a href="/onboarding/licensing" className="underline">Licensing</a></li>
-          <li><a href="/onboarding/complete" className="underline">Complete</a></li>
-        </ul>
-      </section>
-    </main>
+export default function DashboardPage() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Welcome to the WFSL Portal</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>Your dashboard is now running with the new App Shell.</p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>System Status</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>Backend Stability: 10/10</p>
+          <p>Frontend Mode: 2026 UI upgrade</p>
+          <p>Next Step: Onboarding UI</p>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

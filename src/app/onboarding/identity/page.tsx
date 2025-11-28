@@ -1,8 +1,14 @@
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+
 export default function IdentityPage() {
   return (
-    <main style={{ padding: "2rem" }}>
-      <h1>Identity Verification</h1>
-      <p>This page has loaded correctly.</p>
-    </main>
+    <Card>
+      <CardHeader>
+        <CardTitle>Identity Verification</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>This onboarding module is now using the new WFSL 2026 UI.</p>
+      </CardContent>
+    </Card>
   );
 }

@@ -1,8 +1,14 @@
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+
 export default function ProfilePage() {
   return (
-    <main style={{ padding: "2rem" }}>
-      <h1>Profile Details</h1>
-      <p>This page has loaded correctly.</p>
-    </main>
+    <Card>
+      <CardHeader>
+        <CardTitle>Profile Information</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>This module will collect basic profile details.</p>
+      </CardContent>
+    </Card>
   );
 }

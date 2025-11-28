@@ -1,8 +1,11 @@
-export default function IdentityPage() {
+export default function OnboardingLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <main style={{ padding: "2rem" }}>
-      <h1>Identity Verification</h1>
-      <p>This page has loaded correctly.</p>
-    </main>
+    <div className="max-w-2xl mx-auto p-6">
+      {children}
+    </div>
   );
 }

@@ -1,8 +1,14 @@
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+
 export default function LicensingPage() {
   return (
-    <main style={{ padding: "2rem" }}>
-      <h1>Licensing Requirements</h1>
-      <p>This page has loaded correctly.</p>
-    </main>
+    <Card>
+      <CardHeader>
+        <CardTitle>Licensing & Credentials</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>This module will handle certificates, cards, and WFSL licence assignment.</p>
+      </CardContent>
+    </Card>
   );
 }

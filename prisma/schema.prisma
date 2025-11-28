@@ -1,126 +1,13 @@
-// ---------------------------------------------------------
-// GENERATORS
-// ---------------------------------------------------------
 generator client {
   provider = "prisma-client-js"
 }
 
-// ---------------------------------------------------------
-// DATASOURCE
-// ---------------------------------------------------------
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// ---------------------------------------------------------
-// USER MODEL
-// ---------------------------------------------------------
-model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  name         String?
-  passwordHash String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  accounts Account[]
-  sessions Session[]
-
-  engineers         Engineer[]
-  EmailVerification EmailVerification[]
-  PasswordReset     PasswordReset[]
-}
-
-// ---------------------------------------------------------
-// ACCOUNT MODEL
-// (Required by your existing authentication stack)
-// ---------------------------------------------------------
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-// ---------------------------------------------------------
-// SESSION MODEL
-// ---------------------------------------------------------
-model Session {
-  id        String   @id @default(cuid())
-  userId    String
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-// ---------------------------------------------------------
-// EMAIL VERIFICATION (from your auth email suite)
-// ---------------------------------------------------------
-model EmailVerification {
-  id        String   @id @default(cuid())
-  userId    String
-  token     String   @unique
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-// ---------------------------------------------------------
-// PASSWORD RESET TOKENS (from your auth email suite)
-// ---------------------------------------------------------
-model PasswordReset {
-  id        String   @id @default(cuid())
-  userId    String
-  token     String   @unique
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-// ---------------------------------------------------------
-// ENGINEER MODEL (WFSL ONBOARDING MODULE)
-// ---------------------------------------------------------
-model Engineer {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  fullName String
-  email    String
-  phone    String?
-  address  String?
-
-  cscsNumber  String?
-  nrswaNumber String?
-  nopsCert    String?
-  rightToWork String?
-
-  status EngineerStatus @default(PENDING)
-
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id])
-}
-
-// ---------------------------------------------------------
-// ENGINEER STATUS ENUM
-// ---------------------------------------------------------
-enum EngineerStatus {
-  PENDING
-  UNDER_REVIEW
-  APPROVED
-  REJECTED
+model testRecord {
+  id    Int    @id @default(autoincrement())
+  title String
 }

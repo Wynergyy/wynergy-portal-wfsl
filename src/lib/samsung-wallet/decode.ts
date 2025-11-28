@@ -5,3 +5,4 @@ export function decodeSamsungPayload(payload: any) {
     rawClaims: payload || {},
   };
 }
+

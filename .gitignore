@@ -1,6 +1,46 @@
+# Node
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Next.js
 .next/
-.env
+out/
 dist/
-.vercel
-.env*.local
+build/
+
+# env
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+*.csv
+!.gitkeep
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+
+# Shadcn
+components.json
+
+# VSCode
+.vscode/
+
+# WFSL system
+src/wfsl.manifest.json
+
+# Temp
+*.tmp
+*.temp

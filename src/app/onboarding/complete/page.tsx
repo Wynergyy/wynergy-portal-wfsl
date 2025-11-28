@@ -1,25 +1,15 @@
-"use client";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-export default function OnboardingComplete() {
-  const router = useRouter();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      router.push("/dashboard");
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, [router]);
-
+export default function CompletePage() {
   return (
-    <main style={{ padding: "2rem", textAlign: "center" }}>
-      <h1 style={{ fontSize: "2rem", marginBottom: "1rem" }}>
-        Onboarding Complete
-      </h1>
-      <p>You are being redirected to your dashboard...</p>
-    </main>
+    <Card>
+      <CardHeader>
+        <CardTitle>Onboarding Complete</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>Your onboarding process is now finished.</p>
+        <p>You may now proceed to the WFSL Dashboard.</p>
+      </CardContent>
+    </Card>
   );
 }
