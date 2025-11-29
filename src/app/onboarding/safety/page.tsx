@@ -1,14 +1,21 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { getSession } from "@/lib/auth";
+import { Card } from "@/components/ui/card";
 
-export default function SafetyPage() {
+export default async function SafetyPage() {
+  const session = await getSession();
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Safety & Compliance</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p>This module will handle safety declarations and compliance steps.</p>
-      </CardContent>
+    <Card className="p-6">
+      <h1 className="text-xl font-semibold mb-4">Safety & Compliance</h1>
+
+      <p className="text-sm text-muted-foreground mb-4">
+        Logged in as: {session?.user?.email}
+      </p>
+
+      <p className="text-sm">
+        This step will gather required safety and compliance information
+        relevant to engineering, telecoms, or contractor duties.
+      </p>
     </Card>
   );
 }

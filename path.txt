@@ -1,0 +1,8 @@
+export default function AdminConsole() {
+  return (
+    <>
+      <h1 className="text-2xl font-bold">AssurePay Admin Console</h1>
+      <p className="mt-4">System-wide analytics, dispute resolutions, compliance checks, GOV audit logs.</p>
+    </>
+  );
+}

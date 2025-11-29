@@ -1,15 +1,16 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+// src/app/onboarding/complete/page.tsx
 
-export default function CompletePage() {
+import { NextPage } from 'next';
+
+const Page: NextPage = () => {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Onboarding Complete</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p>Your onboarding process is now finished.</p>
-        <p>You may now proceed to the WFSL Dashboard.</p>
-      </CardContent>
-    </Card>
+    <div>
+      {/* Your component content */}
+    </div>
   );
-}
+};
+
+export default Page;
+
+// New method for route segment config
+export const runtime = 'edge';  // Example of using new config for edge runtime

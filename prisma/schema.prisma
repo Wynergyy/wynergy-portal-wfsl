@@ -1,13 +1,276 @@
+//
+// COMPLETE PRISMA SCHEMA REPLACEMENT
+// WFSL + DURBIN HOUSE + ASSUREPAY
+//
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+//
+// =========================================
+// USERS
+// =========================================
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  role     String @default("landlord")
+
+  properties      Property[]
+  paymentAccounts PaymentAccount[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model testRecord {
-  id    Int    @id @default(autoincrement())
-  title String
+//
+// =========================================
+// PROPERTY + COMPLIANCE MODELS
+// =========================================
+model Property {
+  id           Int    @id @default(autoincrement())
+  address      String
+  city         String
+  postcode     String
+  propertyType String
+  occupants    Int    @default(1)
+  households   Int    @default(1)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  gasSafety  GasSafety?
+  eicr       EICR?
+  epc        EPC?
+  fireSafety FireSafety?
+  alarms     AlarmCompliance?
+  licence    Licence?
+  checklist  HabitabilityChecklist?
+
+  documents    Document[]
+  reminders    ComplianceReminder[]
+  transactions PaymentTransaction[]
+  schedules    PaymentSchedule[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+model GasSafety {
+  id         Int       @id @default(autoincrement())
+  propertyId Int       @unique
+  fileUrl    String?
+  issueDate  DateTime?
+  expiryDate DateTime?
+  status     String    @default("missing")
+
+  property Property @relation(fields: [propertyId], references: [id])
+}
+
+model EICR {
+  id         Int       @id @default(autoincrement())
+  propertyId Int       @unique
+  fileUrl    String?
+  issueDate  DateTime?
+  expiryDate DateTime?
+  status     String    @default("missing")
+
+  property Property @relation(fields: [propertyId], references: [id])
+}
+
+model EPC {
+  id         Int       @id @default(autoincrement())
+  propertyId Int       @unique
+  fileUrl    String?
+  rating     String?
+  issueDate  DateTime?
+  expiryDate DateTime?
+  status     String    @default("missing")
+
+  property Property @relation(fields: [propertyId], references: [id])
+}
+
+model FireSafety {
+  id              Int       @id @default(autoincrement())
+  propertyId      Int       @unique
+  fireRiskFileUrl String?
+  lastAssessment  DateTime?
+  status          String    @default("missing")
+
+  property Property @relation(fields: [propertyId], references: [id])
+}
+
+model AlarmCompliance {
+  id          Int       @id @default(autoincrement())
+  propertyId  Int       @unique
+  smokeAlarms Boolean   @default(false)
+  coAlarms    Boolean   @default(false)
+  lastChecked DateTime?
+  status      String    @default("non_compliant")
+
+  property Property @relation(fields: [propertyId], references: [id])
+}
+
+model Licence {
+  id            Int       @id @default(autoincrement())
+  propertyId    Int       @unique
+  licenceType   String?
+  licenceNumber String?
+  issueDate     DateTime?
+  expiryDate    DateTime?
+  status        String    @default("not_required")
+
+  property Property @relation(fields: [propertyId], references: [id])
+}
+
+model HabitabilityChecklist {
+  id             Int     @id @default(autoincrement())
+  propertyId     Int     @unique
+  dampMould      Boolean @default(false)
+  ventilation    Boolean @default(false)
+  heating        Boolean @default(false)
+  structureSafe  Boolean @default(false)
+  fireExitsClear Boolean @default(false)
+  sanitation     Boolean @default(false)
+  infestation    Boolean @default(false)
+  notes          String?
+  status         String  @default("incomplete")
+
+  property Property @relation(fields: [propertyId], references: [id])
+}
+
+model Document {
+  id         Int      @id @default(autoincrement())
+  propertyId Int
+  type       String
+  fileUrl    String
+  uploadedAt DateTime @default(now())
+
+  property Property @relation(fields: [propertyId], references: [id])
+}
+
+model ComplianceReminder {
+  id           Int      @id @default(autoincrement())
+  propertyId   Int
+  category     String
+  message      String
+  reminderDate DateTime
+  sent         Boolean  @default(false)
+
+  property Property @relation(fields: [propertyId], references: [id])
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  action     String
+  category   String
+  propertyId Int?
+  userId     Int?
+  timestamp  DateTime @default(now())
+  details    String?
+}
+
+//
+// =========================================
+// ASSUREPAY PAYMENT SYSTEM
+// =========================================
+model PaymentAccount {
+  id       Int    @id @default(autoincrement())
+  userId   Int
+  balance  Float  @default(0)
+  currency String @default("GBP")
+
+  user         User                 @relation(fields: [userId], references: [id])
+  methods      PaymentMethod[]
+  transactions PaymentTransaction[]
+  schedules    PaymentSchedule[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PaymentMethod {
+  id            Int     @id @default(autoincrement())
+  accountId     Int
+  type          String // bank_transfer, gov_uc, gov_hb, hmpps, card
+  provider      String?
+  accountNumber String?
+  sortCode      String?
+  reference     String?
+  active        Boolean @default(true)
+
+  account          PaymentAccount       @relation(fields: [accountId], references: [id])
+  transactions     PaymentTransaction[]
+  verificationLogs GovVerificationLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PaymentSchedule {
+  id         Int      @id @default(autoincrement())
+  accountId  Int
+  propertyId Int?
+  type       String // rent, arrears, deposit, council_tax
+  amount     Float
+  frequency  String // weekly, monthly, four_weekly
+  nextRun    DateTime
+  active     Boolean  @default(true)
+
+  account          PaymentAccount       @relation(fields: [accountId], references: [id])
+  property         Property?            @relation(fields: [propertyId], references: [id])
+  transactions     PaymentTransaction[]
+  verificationLogs GovVerificationLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PaymentTransaction {
+  id         Int     @id @default(autoincrement())
+  accountId  Int
+  methodId   Int?
+  scheduleId Int?
+  propertyId Int?
+  amount     Float
+  direction  String // incoming, outgoing
+  status     String  @default("pending")
+  reference  String?
+  meta       String?
+
+  account  PaymentAccount   @relation(fields: [accountId], references: [id])
+  method   PaymentMethod?   @relation(fields: [methodId], references: [id])
+  schedule PaymentSchedule? @relation(fields: [scheduleId], references: [id])
+  property Property?        @relation(fields: [propertyId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model GovVerificationLog {
+  id         Int      @id @default(autoincrement())
+  methodId   Int?
+  scheduleId Int?
+  status     String // verified, failed, pending
+  authority  String // UC, HB, HMCTS, HMPPS
+  reference  String?
+  details    String?
+  timestamp  DateTime @default(now())
+
+  method   PaymentMethod?   @relation(fields: [methodId], references: [id])
+  schedule PaymentSchedule? @relation(fields: [scheduleId], references: [id])
+}model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+

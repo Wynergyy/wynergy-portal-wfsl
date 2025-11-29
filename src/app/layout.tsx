@@ -1,21 +1,14 @@
 import "./globals.css";
-import Providers from "@/components/Providers";
 
 export const metadata = {
   title: "WFSL Portal",
-  description: "WFSL Platform 2026",
+  description: "Accommodation compliance and licensing system",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
-        <Providers>{children}</Providers>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

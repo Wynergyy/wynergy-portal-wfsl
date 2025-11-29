@@ -1,0 +1,74 @@
+/* WFSL THEME – SAFE CLEAN VERSION */
+
+/* Root variables */
+:root {
+  --wfsl-primary: #3b82f6;
+  --wfsl-secondary: #0f172a;
+  --wfsl-secondary-hover: #1e293b;
+  --wfsl-accent: #22c55e;
+  --wfsl-bg: #f8fafc;
+  --wfsl-card: #ffffff;
+  --wfsl-border: #e2e8f0;
+  --wfsl-text: #0f172a;
+}
+
+/* Basic global resets */
+body {
+  background-color: var(--wfsl-bg);
+  color: var(--wfsl-text);
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+/* Buttons */
+.wfsl-btn {
+  background-color: var(--wfsl-primary);
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.wfsl-btn:hover {
+  background-color: var(--wfsl-secondary-hover);
+}
+
+/* Cards */
+.wfsl-card {
+  background-color: var(--wfsl-card);
+  border: 1px solid var(--wfsl-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+/* Typography */
+.wfsl-title {
+  color: var(--wfsl-secondary);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.wfsl-subtitle {
+  color: var(--wfsl-secondary-hover);
+  font-weight: 500;
+}
+
+/* Utility classes */
+.wfsl-border {
+  border: 1px solid var(--wfsl-border);
+}
+
+.wfsl-bg-card {
+  background-color: var(--wfsl-card);
+}
+
+.wfsl-text-secondary {
+  color: var(--wfsl-secondary);
+}
+
+.wfsl-text-accent {
+  color: var(--wfsl-accent);
+}
