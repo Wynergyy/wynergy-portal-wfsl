@@ -1,9 +1,10 @@
-export type UserRole = "user" | "engineer" | "contractor" | "admin";
+export const roles = {
+  ADMIN: "admin",
+  LANDLORD: "landlord",
+  TENANT: "tenant",
+  ENGINEER: "engineer",
+  CONTRACTOR: "contractor",
+  COUNCIL: "council"
+} as const;
 
-export function hasRole(
-  role: UserRole | undefined,
-  required: UserRole[]
-): boolean {
-  if (!role) return false;
-  return required.includes(role);
-}
+export type Role = (typeof roles)[keyof typeof roles];

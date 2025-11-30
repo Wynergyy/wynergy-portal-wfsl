@@ -1,8 +1,8 @@
-import { getSession } from "@/lib/auth";
+import { getCurrentSession } from "@/lib/auth";
 import { Card } from "@/components/ui/card";
 
 export default async function SafetyPage() {
-  const session = await getSession();
+  const session = await getCurrentSession();
 
   return (
     <Card className="p-6">

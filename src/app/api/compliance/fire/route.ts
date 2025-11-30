@@ -1,15 +1,27 @@
-import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
 
 export async function POST(req: Request) {
-  const data = await req.json();
+  try {
+    const body = await req.json();
+    const { propertyId, assessmentDate, status } = body;
 
-  const rec = await prisma.document.create({
-    data: {
-      ...data,
-      type: "fire",
-    },
-  });
+    const record = await prisma.fireSafety.upsert({
+      where: { propertyId },
+      update: { assessmentDate, status },
+      create: {
+        propertyId,
+        assessmentDate,
+        status,
+      },
+    });
 
-  return NextResponse.json(rec);
+    return NextResponse.json({ fireSafety: record });
+  } catch (error) {
+    console.error("Fire safety update error:", error);
+    return NextResponse.json(
+      { error: "Failed to update fire safety record" },
+      { status: 500 }
+    );
+  }
 }

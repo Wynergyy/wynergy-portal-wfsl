@@ -1,15 +1,14 @@
-export function MicrosoftIcon(props: any) {
+export default function MicrosoftIcon({ className = "" }) {
   return (
     <svg
-      viewBox="0 0 24 24"
-      width={24}
-      height={24}
-      {...props}
+      className={className}
+      viewBox="0 0 23 23"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      <rect x="2" y="2" width="9" height="9" fill="#F35325" />
-      <rect x="13" y="2" width="9" height="9" fill="#81BC06" />
-      <rect x="2" y="13" width="9" height="9" fill="#05A6F0" />
-      <rect x="13" y="13" width="9" height="9" fill="#FFBA08" />
+      <rect width="10" height="10" x="1" y="1" fill="#F25022" />
+      <rect width="10" height="10" x="12" y="1" fill="#7FBA00" />
+      <rect width="10" height="10" x="1" y="12" fill="#00A4EF" />
+      <rect width="10" height="10" x="12" y="12" fill="#FFB900" />
     </svg>
   );
 }

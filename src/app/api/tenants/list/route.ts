@@ -1,10 +1,15 @@
-import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
 
 export async function GET() {
-  const tenants = await prisma.user.findMany({
-    where: { role: "tenant" },
-  });
-
-  return NextResponse.json(tenants);
+  try {
+    const tenants = await prisma.tenant.findMany();
+    return NextResponse.json({ tenants });
+  } catch (error) {
+    console.error("List tenants error:", error);
+    return NextResponse.json(
+      { error: "Failed to list tenants" },
+      { status: 500 }
+    );
+  }
 }

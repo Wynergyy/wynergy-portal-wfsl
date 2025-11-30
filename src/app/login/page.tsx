@@ -2,79 +2,76 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
-// Brand icons
-import { MicrosoftIcon } from "@/components/icons/MicrosoftIcon";
-import { AppleIcon } from "@/components/icons/AppleIcon";
-import { GoogleIcon } from "@/components/icons/GoogleIcon";
-import { MagicIcon } from "@/components/icons/MagicIcon";
+import GoogleIcon from "@/components/icons/GoogleIcon";
+import AppleIcon from "@/components/icons/AppleIcon";
+import MicrosoftIcon from "@/components/icons/MicrosoftIcon";
+import MagicIcon from "@/components/icons/MagicIcon";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-wfsl-background p-6">
-      <Card className="w-full max-w-md border border-wfsl-border shadow-xl">
+    <div className="flex items-center justify-center min-h-screen p-6 bg-wfsl-background">
+      <Card className="w-full max-w-md shadow-xl border-wfsl-border">
         <CardHeader>
-          <CardTitle className="text-center text-2xl font-semibold tracking-tight">
+          <CardTitle className="text-center text-2xl font-bold">
             Sign in to WFSL Portal
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="flex flex-col gap-4">
-
-          {/* MICROSOFT */}
-          <Button
-            className="w-full flex items-center gap-3 bg-[#0078D4] hover:bg-[#006CBE] text-white"
-            onClick={() => signIn("azure-ad")}
-          >
-            <MicrosoftIcon className="h-5 w-5" />
-            <span>Sign in with Microsoft</span>
-          </Button>
-
-          {/* APPLE */}
-          <Button
-            variant="outline"
-            className="w-full flex items-center gap-3"
-            onClick={() => signIn("apple")}
-          >
-            <AppleIcon className="h-5 w-5" />
-            <span>Sign in with Apple</span>
-          </Button>
-
-          {/* GOOGLE */}
-          <Button
-            variant="outline"
-            className="w-full flex items-center gap-3"
-            onClick={() => signIn("google")}
-          >
-            <GoogleIcon className="h-5 w-5" />
-            <span>Sign in with Google</span>
-          </Button>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Email</label>
+            <Input
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Button
+              className="w-full mt-2"
+              onClick={() => signIn("email", { email })}
+            >
+              <MagicIcon className="w-5 h-5 mr-2" />
+              Continue with Email
+            </Button>
+          </div>
 
           <Separator className="my-4" />
 
-          {/* MAGIC LINK EMAIL */}
-          <Input
-            type="email"
-            placeholder="you@example.com"
-            className="w-full"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <div className="space-y-3">
+            <Button
+              variant="outline"
+              className="w-full flex items-center justify-center"
+              onClick={() => signIn("google")}
+            >
+              <GoogleIcon className="w-5 h-5 mr-2" />
+              Continue with Google
+            </Button>
 
-          <Button
-            className="w-full flex items-center gap-3"
-            onClick={() => signIn("email", { email })}
-          >
-            <MagicIcon className="h-5 w-5" />
-            <span>Send Magic Link</span>
-          </Button>
+            <Button
+              variant="outline"
+              className="w-full flex items-center justify-center"
+              onClick={() => signIn("microsoft")}
+            >
+              <MicrosoftIcon className="w-5 h-5 mr-2" />
+              Continue with Microsoft
+            </Button>
+
+            <Button
+              variant="outline"
+              className="w-full flex items-center justify-center"
+              onClick={() => signIn("apple")}
+            >
+              <AppleIcon className="w-5 h-5 mr-2" />
+              Continue with Apple
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>
