@@ -8,131 +8,129 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String
-  role      String
+  id         Int        @id @default(autoincrement())
+  email      String     @unique
+  password   String
+  role       String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
   properties Property[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
 }
 
 model Property {
-  id          Int       @id @default(autoincrement())
-  address     String
-  city        String
-  postcode    String
+  id           Int                    @id @default(autoincrement())
+  address      String
+  city         String
+  postcode     String
   propertyType String
-  occupants   Int       @default(0)
-  households  Int       @default(0)
-  userId      Int
-  user        User      @relation(fields: [userId], references: [id])
-
-  gasSafety   GasSafety?
-  eicr        EICR?
-  epc         EPC?
-  fireSafety  FireSafety?
-  alarms      AlarmCompliance?
-  licence     Licence?
-  checklist   HabitabilityChecklist?
-  documents   Document[]
-  reminders   Reminder[]
+  occupants    Int                    @default(0)
+  households   Int                    @default(0)
+  userId       Int
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  alarms       AlarmCompliance?
+  documents    Document[]
+  eicr         EICR?
+  epc          EPC?
+  fireSafety   FireSafety?
+  gasSafety    GasSafety?
+  checklist    HabitabilityChecklist?
+  licence      Licence?
+  user         User                   @relation(fields: [userId], references: [id])
+  reminders    Reminder[]
+  schedules    Schedule[]
   transactions Transaction[]
-  schedules   Schedule[]
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
 model GasSafety {
-  id         Int     @id @default(autoincrement())
-  propertyId Int     @unique
-  property   Property @relation(fields: [propertyId], references: [id])
+  id         Int      @id @default(autoincrement())
+  propertyId Int      @unique
   status     String
+  property   Property @relation(fields: [propertyId], references: [id])
 }
 
 model EICR {
-  id         Int     @id @default(autoincrement())
-  propertyId Int     @unique
-  property   Property @relation(fields: [propertyId], references: [id])
+  id         Int      @id @default(autoincrement())
+  propertyId Int      @unique
   status     String
+  property   Property @relation(fields: [propertyId], references: [id])
 }
 
 model EPC {
-  id         Int     @id @default(autoincrement())
-  propertyId Int     @unique
-  property   Property @relation(fields: [propertyId], references: [id])
+  id         Int      @id @default(autoincrement())
+  propertyId Int      @unique
   status     String
+  property   Property @relation(fields: [propertyId], references: [id])
 }
 
 model FireSafety {
-  id         Int     @id @default(autoincrement())
-  propertyId Int     @unique
-  property   Property @relation(fields: [propertyId], references: [id])
+  id         Int      @id @default(autoincrement())
+  propertyId Int      @unique
   status     String
+  property   Property @relation(fields: [propertyId], references: [id])
 }
 
 model AlarmCompliance {
-  id         Int     @id @default(autoincrement())
-  propertyId Int     @unique
-  property   Property @relation(fields: [propertyId], references: [id])
-  smokeAlarms Int?   @default(0)
-  coAlarms    Int?   @default(0)
+  id          Int      @id @default(autoincrement())
+  propertyId  Int      @unique
+  smokeAlarms Int?     @default(0)
+  coAlarms    Int?     @default(0)
   status      String
+  property    Property @relation(fields: [propertyId], references: [id])
 }
 
 model Licence {
-  id         Int     @id @default(autoincrement())
-  propertyId Int     @unique
-  property   Property @relation(fields: [propertyId], references: [id])
+  id         Int      @id @default(autoincrement())
+  propertyId Int      @unique
   status     String
+  property   Property @relation(fields: [propertyId], references: [id])
 }
 
 model HabitabilityChecklist {
-  id            Int     @id @default(autoincrement())
-  propertyId    Int     @unique
-  property      Property @relation(fields: [propertyId], references: [id])
-  dampMould     Boolean @default(false)
-  ventilation   Boolean @default(false)
-  heating       Boolean @default(false)
-  structureSafe Boolean @default(false)
-  fireExitsClear Boolean @default(false)
-  sanitation    Boolean @default(false)
-  infestation   Boolean @default(false)
-  status        String
+  id             Int      @id @default(autoincrement())
+  propertyId     Int      @unique
+  dampMould      Boolean  @default(false)
+  ventilation    Boolean  @default(false)
+  heating        Boolean  @default(false)
+  structureSafe  Boolean  @default(false)
+  fireExitsClear Boolean  @default(false)
+  sanitation     Boolean  @default(false)
+  infestation    Boolean  @default(false)
+  status         String
+  property       Property @relation(fields: [propertyId], references: [id])
 }
 
 model Document {
   id         Int      @id @default(autoincrement())
   propertyId Int
-  property   Property @relation(fields: [propertyId], references: [id])
   name       String
   url        String
   createdAt  DateTime @default(now())
+  property   Property @relation(fields: [propertyId], references: [id])
 }
 
 model Reminder {
   id         Int      @id @default(autoincrement())
   propertyId Int
-  property   Property @relation(fields: [propertyId], references: [id])
   message    String
   dueDate    DateTime
   createdAt  DateTime @default(now())
+  property   Property @relation(fields: [propertyId], references: [id])
 }
 
 model Transaction {
   id         Int      @id @default(autoincrement())
   propertyId Int
-  property   Property @relation(fields: [propertyId], references: [id])
   amount     Float
   type       String
   createdAt  DateTime @default(now())
+  property   Property @relation(fields: [propertyId], references: [id])
 }
 
 model Schedule {
   id         Int      @id @default(autoincrement())
   propertyId Int
-  property   Property @relation(fields: [propertyId], references: [id])
   task       String
   date       DateTime
+  property   Property @relation(fields: [propertyId], references: [id])
 }
